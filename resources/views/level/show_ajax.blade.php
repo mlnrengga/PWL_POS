@@ -28,6 +28,10 @@
         <div class="modal-body">
             <table class="table table-bordered table-striped table-hover table-sm">
                 <tr>
+                    <th>ID</th>
+                    <td>{{ $level->level_id }}</td>
+                </tr>
+                <tr>
                     <th>Kode Level</th>
                     <td>{{ $level->level_kode }}</td>
                 </tr>
