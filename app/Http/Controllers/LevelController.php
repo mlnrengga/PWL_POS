@@ -33,10 +33,6 @@ class LevelController extends Controller
     {
         $levels = LevelModel::select('level_id', 'level_kode', 'level_nama');
 
-    // Filter data user berdasarkan level_id
-    if ($request->level_id) {
-        $levels->where('level_id', $request->level_id);
-    }
     return DataTables::of($levels)
         ->addIndexColumn() // menambahkan kolom index / no urut (default nama kolom:DT_RowIndex)
         ->addColumn('aksi', function ($level) { // menambahkan kolom aksi
@@ -191,7 +187,7 @@ class LevelController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan'
+                'message' => 'Data level berhasil disimpan'
             ]);
         }
 
