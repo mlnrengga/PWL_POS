@@ -132,13 +132,10 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link d-flex align-items-center logout-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <a class="nav-link d-flex align-items-center logout-link" href="{{ url('/logout') }}">
             <i class="fas fa-sign-out-alt"></i>
             <span class="logout-text ml-2">Logout</span>
         </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
     </li>
     
     <style>
@@ -148,9 +145,8 @@
         }
     
         .logout-link:hover .logout-text {
-            display: inline;
+            display: inline; 
             opacity: 1;
         }
     </style>    
-    </ul>
   </nav>
