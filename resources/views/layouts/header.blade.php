@@ -131,5 +131,26 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link d-flex align-items-center logout-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="logout-text ml-2">Logout</span>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    </li>
+    
+    <style>
+        .logout-text {
+            display: none; 
+            transition: opacity 0.3s ease-in-out;
+        }
+    
+        .logout-link:hover .logout-text {
+            display: inline;
+            opacity: 1;
+        }
+    </style>    
     </ul>
   </nav>
