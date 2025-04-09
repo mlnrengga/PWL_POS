@@ -8,7 +8,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-
+use Monolog\Level;
 
 Route::pattern('id', '[0-9]+'); // artinya ketika ada parameter {id}, maka harus berupa angka
 
@@ -128,6 +128,8 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::put('/level/{id}/update_ajax', [LevelController::class, 'update_ajax']); // ajax update
         Route::get('/level/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']); // ajax form confirm
         Route::delete('/level/{id}/delete_ajax', [LevelController::class, 'delete_ajax']); // ajax delete
+        Route::get('/level/import', [LevelController::class, 'import']); // ajax form upload excel
+        Route::post('/level/import_ajax', [LevelController::class, 'import_ajax']); // ajax import excel
     });
 
     // artinya semua route di dalam group ini harus punya role ADM (Administrator) dan MNG (Manager)
@@ -153,6 +155,8 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::put('/kategori/{id}/update_ajax', [KategoriController::class, 'update_ajax']); // ajax update
         Route::get('/kategori/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']); // ajax form confirm
         Route::delete('/kategori/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']); // ajax delete
+        Route::get('/kategori/import', [KategoriController::class, 'import']); // ajax form upload excel
+        Route::post('/kategori/import_ajax', [KategoriController::class, 'import_ajax']); // ajax import excel
     });
     
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
@@ -164,6 +168,8 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::put('/user/{id}/update_ajax', [UserController::class, 'update_ajax']); // ajax update
         Route::get('/user/{id}/delete_ajax', [UserController::class, 'confirm_ajax']); // ajax form confirm
         Route::delete('/user/{id}/delete_ajax', [UserController::class, 'delete_ajax']); // ajax delete
+        Route::get('/user/import', [UserController::class, 'import']); // ajax form upload excel
+        Route::post('/user/import_ajax', [UserController::class, 'import_ajax']); // ajax import excel
     });
     
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
@@ -175,5 +181,7 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::put('/supplier/{id}/update_ajax', [SupplierController::class, 'update_ajax']); // ajax update
         Route::get('/supplier/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']); // ajax form confirm
         Route::delete('/supplier/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']); // ajax delete
+        Route::get('/supplier/import', [SupplierController::class, 'import']); // ajax form upload excel
+        Route::post('/supplier/import_ajax', [SupplierController::class, 'import_ajax']); // ajax import excel
     });    
 });
