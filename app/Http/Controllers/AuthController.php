@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LevelModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -40,5 +43,45 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('login');
+    }
+
+    public function register()
+    {
+        $level = LevelModel::select('level_id', 'level_kode', 'level_nama')->get();
+
+        return view('auth.register', compact('level'));
+    }
+
+    public function postRegister(Request $request)
+    {
+        $rules = [
+            'level_id' => 'required|integer',
+            'username' => 'required|string|min:3|unique:m_user,username',
+            'nama'     => 'required|string|max:100',
+            'password' => 'required|min:5|confirmed',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi Gagal',
+                'msgField' => $validator->errors(),
+            ]);
+        }
+
+        $user = new UserModel();
+        $user->level_id = $request->level_id;
+        $user->username = $request->username;
+        $user->password = bcrypt($request->password);
+        $user->nama = $request->nama;
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Registrasi Berhasil. Silakan login.',
+            'redirect' => url('login')
+        ]);
     }
 }

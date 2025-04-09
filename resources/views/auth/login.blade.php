@@ -58,6 +58,12 @@
                     <!-- /.col -->
                 </div>
             </form>
+            <div class="mt-3 text-center">
+                <p>- OR -</p>
+                <a href="{{ url('/register') }}" class="btn btn-success btn-block">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            </div>
         </div>
         <!-- /.card-body --> 
     </div>
