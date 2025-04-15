@@ -15,6 +15,21 @@ placeholder="Search" aria-label="Search">
   <nav class="mt-2"> 
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" 
 role="menu" data-accordion="false"> 
+<li class="nav-header">Profile</li> 
+<li class="nav-item">
+  <div class="user-panel d-flex align-items-center">
+    <div class="image">
+      <img src="{{ Auth::check() && Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user8-128x128.jpg  ') }}"
+           class="img-circle elevation-2"
+           alt="User Image"
+           style="width: 35px; height: 35px; object-fit: cover;">
+    </div>
+    <div class="info">
+      <a href="{{ url('/user/profile') }}" class="d-block">{{ Auth::user()->nama ?? 'Alexander Pierce' }}</a>
+    </div>
+  </div>
+</li>
+<li class="nav-header">Home</li> 
       <li class="nav-item"> 
         <a href="{{ url('/') }}" class="nav-link  {{ ($activeMenu == 'dashboard')? 
 'active' : '' }} "> 
@@ -67,6 +82,7 @@ role="menu" data-accordion="false">
           <p>Transaksi Penjualan</p> 
         </a> 
       </li> 
+      <li class="nav-header">Data Supplier</li> 
       <li class="nav-item">
         <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu ==
 'supplier') ? 'active' : '' }} ">

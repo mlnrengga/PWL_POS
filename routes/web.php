@@ -39,6 +39,9 @@ Route::middleware(['auth'])->group(function () { // artinya semua route di dalam
         Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']); // Untuk hapus data user Ajax
         Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']); // untuk menampilkan detail
         Route::delete('/{id}', [UserController::class, 'destroy']);  // menghapus data user
+        Route::get('/profile', [UserController::class, 'profile']);
+        Route::get('/profile_ajax', [UserController::class, 'profile_ajax']);
+        Route::post('/profile_update', [UserController::class, 'profile_update']);
     });
 
     Route::group(['prefix' => 'level'], function () {
