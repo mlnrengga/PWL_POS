@@ -46,7 +46,7 @@
 
                             <div class="text-center mt-4">
                                 <button id="btnEditProfile" class="btn btn-primary">
-                                    <i class="fas fa-edit mr-2"></i> Ubah Profil
+                                    <i class="fas fa-edit mr-2"></i> Edit Profil
                                 </button>
                             </div>
                         </div>

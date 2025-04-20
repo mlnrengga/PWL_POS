@@ -7,21 +7,33 @@
             </button>
         </div>
         <form id="updateProfileForm" method="POST" enctype="multipart/form-data"
-            action="{{ url('user/profile_update') }}">
-            @csrf
-            <div class="modal-body">
-                <input type="hidden" name="user_id" value="{{ $user->user_id }}">
-                <div class="form-group">
-                    <label for="profile_photo">Foto Profil</label>
-                    <input type="file" name="profile_photo" id="profile_photo" class="form-control">
-                    <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
-                </div>
+        action="{{ url('user/profile_update') }}">
+        @csrf
+        <div class="modal-body">
+            <input type="hidden" name="user_id" value="{{ $user->user_id }}">
+    
+            <div class="form-group">
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" name="nama" id="nama" value="{{ $user->nama }}" class="form-control" required>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+    
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" value="{{ $user->username }}" class="form-control" required>
             </div>
-        </form>
+    
+            <div class="form-group">
+                <label for="profile_photo">Foto Profil</label>
+                <input type="file" name="profile_photo" id="profile_photo" class="form-control">
+                <small class="text-muted">Format: jpg, jpeg, png. Maksimal 2MB</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+    </form>
+    
     </div>
 </div>
 
