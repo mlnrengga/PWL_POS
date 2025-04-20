@@ -464,12 +464,14 @@ class UserController extends Controller
 
     public function profile_update(Request $request)
     {
-        // Melakukan validasi input file
+        // Validasi input
         $validator = Validator::make($request->all(), [
             'user_id'       => 'required|exists:m_user,user_id',
+            'nama'          => 'required|string|max:100',
+            'username'      => 'required|string|max:50|unique:m_user,username,' . $request->user_id . ',user_id',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json([
                 'status'  => false,
@@ -477,40 +479,42 @@ class UserController extends Controller
                 'errors'  => $validator->errors()
             ]);
         }
-
-        // Mencari data user berdasarkan ID yang dikirim (dari hidden field)
+    
+        // Ambil user
         $user = UserModel::find($request->input('user_id'));
-
+    
         if (!$user) {
             return response()->json([
                 'status'  => false,
                 'message' => 'User tidak ditemukan.'
             ]);
         }
-
+    
+        // Update nama & username
+        $user->nama = $request->input('nama');
+        $user->username = $request->input('username');
+    
         // Jika ada file foto profil yang diunggah
         if ($request->hasFile('profile_photo') && $request->file('profile_photo')->isValid()) {
             $file = $request->file('profile_photo');
             $filename = $user->user_id . '_' . time() . '.' . $file->getClientOriginalExtension();
-
+    
             // Hapus file lama jika ada
             if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
                 Storage::disk('public')->delete($user->profile_photo);
             }
-
+    
             // Simpan file baru
             $path = $file->storeAs('profiles', $filename, 'public');
             $user->profile_photo = $path;
-            $user->save();
         }
-
-
-        // Simpan perubahan ke database
+    
         $user->save();
-
+    
         return response()->json([
             'status'  => true,
-            'message' => 'Profil berhasil diperbarui'
+            'message' => 'Profil berhasil diperbarui.'
         ]);
     }
+    
 }
