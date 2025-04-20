@@ -17,18 +17,21 @@ placeholder="Search" aria-label="Search">
 role="menu" data-accordion="false"> 
 <li class="nav-header">Profile</li> 
 <li class="nav-item">
-  <div class="user-panel d-flex align-items-center">
-    <div class="image">
-      <img src="{{ Auth::check() && Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user8-128x128.jpg  ') }}"
-           class="img-circle elevation-2"
+  <div class="user-panel d-flex flex-column align-items-center text-center py-2">
+    <div class="image mb-1">
+      <img src="{{ Auth::check() && Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user8-128x128.jpg') }}"
+           class="img-fluid rounded-circle shadow-sm"
            alt="User Image"
-           style="width: 35px; height: 35px; object-fit: cover;">
+           style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #fff;">
     </div>
     <div class="info">
-      <a href="{{ url('/user/profile') }}" class="d-block">{{ Auth::user()->nama ?? 'Alexander Pierce' }}</a>
+      <a href="{{ url('/user/profile') }}" class="d-block text-white" style="font-size: 14px; font-weight: 500;">
+        {{ Auth::user()->nama ?? 'Alexander Pierce' }}
+      </a>
     </div>
   </div>
 </li>
+
 <li class="nav-header">Home</li> 
       <li class="nav-item"> 
         <a href="{{ url('/') }}" class="nav-link  {{ ($activeMenu == 'dashboard')? 
@@ -76,7 +79,7 @@ role="menu" data-accordion="false">
         </a> 
       </li> 
       <li class="nav-item"> 
-        <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 
+        <a href="{{ url('/penjualan') }}" class="nav-link {{ ($activeMenu == 
 'penjualan')? 'active' : '' }} "> 
           <i class="nav-icon fas fa-cash-register"></i> 
           <p>Transaksi Penjualan</p> 
