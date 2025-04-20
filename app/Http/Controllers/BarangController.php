@@ -34,7 +34,9 @@ class BarangController extends Controller
             // Ambil data level dalam bentuk json untuk datatables
             public function list(Request $request)
             {
-                $barangs = BarangModel::select('barang_id', 'kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+                $barangs = BarangModel::select('barang_id', 'kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'barang_stok')
+                    ->orderBy('kategori_id')
+                    ->orderBy('barang_kode')
                 ->with('kategori');
 
                 // Filter data user berdasarkan level_id
@@ -371,7 +373,7 @@ class BarangController extends Controller
             public function export_excel()
             {
                 // ambil data barang yang akan di export
-                $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+                $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'barang_stok')
                                     ->orderBy('kategori_id')
                                     ->with('kategori')
                                     ->get();
@@ -384,7 +386,8 @@ class BarangController extends Controller
                 $sheet->setCellValue('C1', 'Nama Barang');
                 $sheet->setCellValue('D1', 'Harga Beli');
                 $sheet->setCellValue('E1', 'Harga Jual');
-                $sheet->setCellValue('F1', 'Kategori');
+                $sheet->setCellValue('F1', 'Jumlah Stok');
+                $sheet->setCellValue('G1', 'Kategori');
 
                 $sheet->getStyle('A1:F1')->getFont()->setBold(true); // bold header
 
@@ -396,7 +399,8 @@ class BarangController extends Controller
                     $sheet->setCellValue('C'.$baris, $value->barang_nama);
                     $sheet->setCellValue('D'.$baris, $value->harga_beli);
                     $sheet->setCellValue('E'.$baris, $value->harga_jual);
-                    $sheet->setCellValue('F'.$baris, $value->kategori->kategori_nama); // ambil nama kategori
+                    $sheet->setCellValue('F'.$baris, $value->barang_stok);
+                    $sheet->setCellValue('G'.$baris, $value->kategori->kategori_nama); // ambil nama kategori
                     $baris++;
                     $no++;
                 }
@@ -426,7 +430,7 @@ class BarangController extends Controller
 
             public function export_pdf()
             {
-                $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+                $barang = BarangModel::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual', 'barang_stok')
                                     ->orderBy('kategori_id')
                                     ->orderBy('barang_kode')
                                     ->with('kategori')

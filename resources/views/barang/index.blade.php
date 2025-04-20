@@ -3,7 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Daftar Barang</h3>
+            <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
                 <button onclick="modalAction('{{ url('/barang/import') }}')" class="btn btn-sm btn-info mt-1">Import Barang</button>
                 <a href="{{ url('/barang/export_excel') }}" class="btn btn-sm btn-primary mt-1"><i class="fa fa-file-excel"></i> Export Barang</a>
@@ -46,6 +46,7 @@
                         <th>Nama Barang</th>
                         <th>Harga Beli</th>
                         <th>Harga Jual</th>
+                        <th>Jumlah Stok</th>
                         <th>Kategori</th>
                         <th>Aksi</th>
                     </tr>
@@ -94,7 +95,7 @@
                 }, {
                     data: "barang_nama",
                     className: "",
-                    width: "37%",
+                    width: "23%",
                     orderable: true,
                     searchable: true,
                 }, {
@@ -115,10 +116,19 @@
                     render: function(data, type, row) {
                         return new Intl.NumberFormat('id-ID').format(data);
                     }
-                }, {
+                },{
+                    data: "barang_stok",
+                    className: "",
+                    width: "10%",
+                    orderable: true,
+                    searchable: false,
+                    render: function(data, type, row) {
+                        return new Intl.NumberFormat('id-ID').format(data);
+                    }
+                },{
                     data: "kategori.kategori_nama",
                     className: "",
-                    width: "14%",
+                    width: "17%",
                     orderable: true,
                     searchable: false
                 }, {

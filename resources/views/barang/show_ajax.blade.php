@@ -51,6 +51,10 @@
                     <th>Harga Jual</th>
                     <td>{{ $barang->harga_jual }}</td>
                 </tr>
+                <tr>
+                    <th>Jumlah Stok</th>
+                    <td>{{ $barang->barang_stok }}</td>
+                </tr>
             </table>
         </div>
         <div class="modal-footer">

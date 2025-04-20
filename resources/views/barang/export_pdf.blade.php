@@ -101,6 +101,7 @@
                 <th>Nama Barang</th>
                 <th class="text-right">Harga Beli</th>
                 <th class="text-right">Harga Jual</th>
+                <th class="text-center">Jumlah Stok</th>
                 <th>Kategori</th>
             </tr>
         </thead>
@@ -112,6 +113,7 @@
                     <td>{{ $b->barang_nama }}</td>
                     <td class="text-right">{{ number_format($b->harga_beli, 0, ',', '.') }}</td>
                     <td class="text-right">{{ number_format($b->harga_jual, 0, ',', '.') }}</td>
+                    <td class="text-center">{{ number_format($b->barang_stok) }}</td>
                     <td>{{ $b->kategori->kategori_nama }}</td>
                 </tr>
             @endforeach
