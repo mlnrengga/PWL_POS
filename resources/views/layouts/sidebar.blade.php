@@ -19,10 +19,12 @@ role="menu" data-accordion="false">
 <li class="nav-item">
   <div class="user-panel d-flex flex-column align-items-center text-center py-2">
     <div class="image mb-1">
-      <img src="{{ Auth::check() && Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user8-128x128.jpg') }}"
-           class="img-fluid rounded-circle shadow-sm"
-           alt="User Image"
-           style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #fff;">
+      <a href="{{ url('/user/profile') }}">
+        <img src="{{ Auth::check() && Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('adminlte/dist/img/user8-128x128.jpg') }}"
+             class="img-fluid rounded-circle shadow-sm"
+             alt="User Image"
+             style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #fff;">
+      </a>
     </div>
     <div class="info">
       <a href="{{ url('/user/profile') }}" class="d-block text-white" style="font-size: 14px; font-weight: 500;">

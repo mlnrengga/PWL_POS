@@ -91,7 +91,7 @@ $(document).ready(function() {
                             title: 'Berhasil',
                             text: response.message
                         });
-                        dataStok.ajax.reload();
+                        tableStok.ajax.reload();
                     } else {
                         $('.error-text').text('');
                         $.each(response.msgField, function(prefix, val) {

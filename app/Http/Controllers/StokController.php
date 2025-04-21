@@ -356,7 +356,7 @@ class StokController extends Controller
                 ]);
             }
 
-            DB::beginTransaction(); // Mulai transaksi
+            DB::beginTransaction(); 
 
             try {
                 $stok = StokModel::find($id);
@@ -368,20 +368,18 @@ class StokController extends Controller
                     ]);
                 }
 
-                // Simpan nilai stok lama sebelum diupdate
                 $oldStokJumlah = $stok->stok_jumlah;
 
                 $stok->update($request->all());
 
                 $diff = $request->stok_jumlah - $oldStokJumlah;
 
-                // Update stok barang hanya jika ada perubahan jumlah
                 if ($diff != 0) {
                     BarangModel::where('barang_id', $request->barang_id)
                         ->increment('barang_stok', $diff);
                 }
 
-                DB::commit(); // Commit transaksi
+                DB::commit(); 
 
                 return response()->json([
                     'status'  => true,
@@ -410,14 +408,28 @@ class StokController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $stok = StokModel::find($id);
+    
             if ($stok) {
-                try{
+                DB::beginTransaction();
+                try {
+                    // Simpan jumlah stok sebelum dihapus
+                    $jumlahStok = $stok->stok_jumlah;
+                    $barangId   = $stok->barang_id;
+    
+                    // Hapus data stok
                     $stok->delete();
+    
+                    // Kurangi stok barang sesuai jumlah stok yang dihapus
+                    BarangModel::where('barang_id', $barangId)
+                        ->decrement('barang_stok', $jumlahStok);
+    
+                    DB::commit();
                     return response()->json([
                         'status' => true,
                         'message' => 'Data stok berhasil dihapus.',
                     ]);
-                } catch(QueryException $e){
+                } catch (QueryException $e) {
+                    DB::rollBack();
                     return response()->json([
                         'status' => false,
                         'message' => 'Data stok gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini.'
@@ -430,10 +442,10 @@ class StokController extends Controller
                 ]);
             }
         }
-
+    
         return redirect('/');
     }
-
+    
     public function show_ajax(string $id){
         $stok = StokModel::with(['user', 'barang', 'supplier'])->find($id);
 
@@ -449,7 +461,6 @@ class StokController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
 
             $rules = [
-                // Validasi file harus xlsx, maksimal 1MB
                 'file_stok' => ['required', 'mimes:xlsx', 'max:1024']
             ];
 
@@ -463,24 +474,21 @@ class StokController extends Controller
                 ]);
             }
 
-            // Ambil file dari request
             $file = $request->file('file_stok');
 
-            // Membuat reader untuk file excel dengan format Xlsx
             $reader = IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true); // Hanya membaca data saja
+            $reader->setReadDataOnly(true); 
 
             $path = $file->getPathname();
             $spreadsheet = $reader->load($path);
             $sheet = $spreadsheet->getActiveSheet();
 
-            // Ambil data excel sebagai array
             $data = $sheet->toArray(null, false, true, true);
             $insert = [];
             $barangIds   = [];
-             if (count($data) > 1) { // Jika data lebih dari 1 baris
+             if (count($data) > 1) {
                 foreach ($data as $baris => $value) {
-                    if ($baris > 1) { // Baris ke-1 adalah header, maka lewati
+                    if ($baris > 1) { 
 
                         $tanggal_masuk = is_numeric($value['D'])
                         ? Date::excelToDateTimeObject($value['D'])->format('Y-m-d')
@@ -500,7 +508,6 @@ class StokController extends Controller
                 }
 
                 if (count($insert) > 0) {
-                    // Insert data ke database, jika data sudah ada, maka diabaikan
                     StokModel::insertOrIgnore($insert);
 
                     $uniqueBarang = array_unique($barangIds);
@@ -533,7 +540,6 @@ class StokController extends Controller
 
     public function export_excel()
     {
-        //Ambil value stok yang akan diexport
         $stok = StokModel::select(
             'barang_id',
             'user_id',
@@ -547,7 +553,7 @@ class StokController extends Controller
 
         //load library excel
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet(); //ambil sheet aktif
+        $sheet = $spreadsheet->getActiveSheet(); 
 
         $sheet->setCellValue('A1', 'No');
         $sheet->setCellValue('B1', 'Nama Barang');
@@ -556,10 +562,10 @@ class StokController extends Controller
         $sheet->setCellValue('E1', 'Tanggal Stok');
         $sheet->setCellValue('F1', 'Jumlah Stok');
 
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true); // Set header bold
+        $sheet->getStyle('A1:F1')->getFont()->setBold(true); 
 
-        $no = 1; //Nomor value dimulai dari 1
-        $baris = 2; //Baris value dimulai dari 2
+        $no = 1; 
+        $baris = 2; 
         foreach ($stok as $key => $value) {
             $sheet->setCellValue('A' . $baris, $no);
             $sheet->setCellValue('B' . $baris, $value->barang->barang_nama);
@@ -572,12 +578,12 @@ class StokController extends Controller
         }
 
         foreach (range('A', 'F') as $columnID) {
-            $sheet->getColumnDimension($columnID)->setAutoSize(true); //set auto size untuk kolom
+            $sheet->getColumnDimension($columnID)->setAutoSize(true); 
         }
 
-        $sheet->setTitle('Data Stock Barang'); //set judul sheet
-        $writer = IOFactory ::createWriter($spreadsheet, 'Xlsx'); //set writer
-        $filename = 'Data_Stock_Barang_' . date('Y-m-d_H-i-s') . '.xlsx'; //set nama file
+        $sheet->setTitle('Data Stock Barang'); 
+        $writer = IOFactory ::createWriter($spreadsheet, 'Xlsx'); 
+        $filename = 'Data_Stock_Barang_' . date('Y-m-d_H-i-s') . '.xlsx';
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -588,8 +594,8 @@ class StokController extends Controller
         header('Cache-Control: cache, must-revalidate');
         header('Pragma: public');
 
-        $writer->save('php://output'); //simpan file ke output
-        exit; //keluar dari scriptA
+        $writer->save('php://output'); 
+        exit; 
     }
 
     public function export_pdf(){
@@ -605,12 +611,10 @@ class StokController extends Controller
         ->with(['barang', 'user', 'supplier'])
         ->get();
 
-        // use Barryvdh\DomPDF\Facade\Pdf;
         $pdf = PDF::loadView('stok.export_pdf', ['stok' => $stok]);
-        $pdf->setPaper('A4', 'portrait'); // set ukuran kertas dan orientasi
-        $pdf->setOption("isRemoteEnabled", true); // set true jika ada gambar dari url
-        $pdf->render(); // render pdf
-
+        $pdf->setPaper('A4', 'portrait'); 
+        $pdf->setOption("isRemoteEnabled", true); 
+        $pdf->render();
         return $pdf->stream('Data Stock Barang '.date('Y-m-d H-i-s').'.pdf');
     }
 }

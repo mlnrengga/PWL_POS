@@ -130,7 +130,7 @@
                                     text: response.message
                                 });
                                 // Pastikan variabel dataStok (DataTable stok) tersedia di global scope
-                                dataStok.ajax.reload();
+                                tableStok.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {
