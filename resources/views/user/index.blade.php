@@ -75,7 +75,7 @@
                     dataType: "json",
                     type: "POST",
                     data: function (d) {
-                        d.filter_level = $('.filter_level').val();
+                        d.level_id = $('#level_id').val();
                     }
                 },
                 columns: [
@@ -119,7 +119,7 @@
                 }
             });
 
-            $('.filter_kategori').change(function() {
+            $('#level_id').change(function() {
                 tableUser.draw();
             });
         });

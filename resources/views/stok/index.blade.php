@@ -145,7 +145,7 @@ data-width="75%"></div>
         });
 
         $('#barang_id, #user_id, #supplier_id').on('change', function() {
-            dataStok.ajax.reload();
+            tableStok.ajax.reload();
         });
 
     });

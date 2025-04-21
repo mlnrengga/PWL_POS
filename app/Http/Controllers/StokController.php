@@ -36,60 +36,6 @@ class StokController extends Controller
         return view('stok.index', ['breadcrumb' => $breadcrumb, 'barang' => $barang, 'user'=> $user, 'supplier' => $supplier, 'page' => $page,'activeMenu' => $activeMenu]);
     }
 
-    //=======================================================================================Jobsheet 4 Praktikum 2.6============================================================================================
-    public function tambah()
-    {
-        $barangs = BarangModel::all();
-        $users  = UserModel::all();
-        $suppliers = SupplierModel::all();
-
-        return view('stok_tambah', ['barangs' => $barangs, 'users' => $users, 'suppliers' => $suppliers]);
-    }
-
-    public function tambah_simpan(Request $request)
-    {
-        StokModel::create([
-            'barang_id'    => $request->barang_id,
-            'user_id'      => $request->user_id,
-            'supplier_id'  => $request->supplier_id,
-            'stok_tanggal' => $request->stok_tanggal,
-            'stok_jumlah'  => $request->stok_jumlah,
-        ]);
-
-        return redirect('/stok');
-    }
-
-    public function ubah($id)
-    {
-        $stok = StokModel::find($id);
-        $barangs = BarangModel::all();
-        $users  = UserModel::all();
-        $suppliers = SupplierModel::all();
-        return view('stok_ubah', ['data' => $stok, 'barangs' => $barangs, 'users' => $users, 'suppliers' => $suppliers]);
-    }
-
-    public function ubah_simpan($id, Request $request)
-    {
-        $stok = StokModel::find($id);
-
-        $stok->barang_id    = $request->barang_id;
-        $stok->user_id      = $request->user_id;
-        $stok->stok_tanggal = $request->stok_tanggal;
-        $stok->stok_jumlah  = $request->stok_jumlah;
-
-        $stok->save();
-
-        return redirect('/stok');
-    }
-
-    public function hapus($id)
-    {
-        $stok = StokModel::find($id);
-        $stok->delete();
-
-        return redirect('/stok');
-    }
-
     public function list(Request $request){
         $stoks = StokModel::select('stok_id', 'barang_id', 'user_id', 'supplier_id', 'stok_tanggal', 'stok_jumlah')
         ->with(['barang', 'user', 'supplier']);
@@ -250,9 +196,7 @@ class StokController extends Controller
             return redirect('/stok')->with('error', 'Data stok gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
-    //=======================================================================================================================================================================================================
 
-    //========================================================================================Jobsheet 6=====================================================================================================
     public function create_ajax()
     {
         $barang = BarangModel::select('barang_id', 'barang_nama')->get();
