@@ -10,6 +10,16 @@
         action="{{ url('user/profile_update') }}">
         @csrf
         <div class="modal-body">
+            <div class="form-group">
+                <!-- Preview -->
+                <div class="text-center mt-2">
+                    <img id="previewProfilePhoto"
+                         src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : asset('adminlte/dist/img/user2-160x160.jpg') }}"
+                         alt="Preview Foto Profil"
+                         class="img-thumbnail"
+                         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+                </div>
+            </div>
             <input type="hidden" name="user_id" value="{{ $user->user_id }}">
     
             <div class="form-group">
@@ -39,6 +49,16 @@
 
 <script>
     $(document).ready(function() {
+        $('#profile_photo').on('change', function(event) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewProfilePhoto').attr('src', e.target.result);
+            }
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+
         $('#updateProfileForm').submit(function(e) {
             e.preventDefault(); 
             var formData = new FormData(this);
