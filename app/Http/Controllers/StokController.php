@@ -56,6 +56,9 @@ class StokController extends Controller
         }
 
         return DataTables::of($stoks)
+        ->addColumn('stok_total', function ($stok) {
+            return $stok->barang->getStok(); // Menggunakan metode getStok dari BarangModel
+        })
 
         ->addIndexColumn() // menambahkan kolom index / no urut (default user_id kolom:DT_RowIndex)
         ->addColumn('aksi', function ($stoks) { // menambahkan kolom aksi

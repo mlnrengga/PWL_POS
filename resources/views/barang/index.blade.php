@@ -46,7 +46,6 @@
                         <th>Nama Barang</th>
                         <th>Harga Beli</th>
                         <th>Harga Jual</th>
-                        <th>Jumlah Stok</th>
                         <th>Kategori</th>
                         <th>Aksi</th>
                     </tr>
@@ -109,15 +108,6 @@
                     }
                 }, {
                     data: "harga_jual",
-                    className: "",
-                    width: "10%",
-                    orderable: true,
-                    searchable: false,
-                    render: function(data, type, row) {
-                        return new Intl.NumberFormat('id-ID').format(data);
-                    }
-                },{
-                    data: "barang_stok",
                     className: "",
                     width: "10%",
                     orderable: true,
